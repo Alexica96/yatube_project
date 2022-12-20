@@ -1,4 +1,4 @@
-"""yatube URL Configuration
+"""anfisa URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.2/topics/http/urls/
@@ -14,8 +14,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+# импорт include позволит использовать адреса, включенные в приложения
+from django.urls import include, path 
 
-urlpatterns = [
+urlpatterns = [    
+    # Сначала проверяем все пути, которые есть в приложении ice_cream
+    path('', include('posts.urls')),
     path('admin/', admin.site.urls),
 ]
