@@ -1,29 +1,32 @@
 from django.http import HttpResponse
 # Импортируем загрузчик.
 from django.template import loader
+from .models import Post
+from django.shortcuts import render
+
 
 def index(request):
-    template = loader.get_template('posts\\index.html')
-    title = 'Это главная страница проекта Yatube'
-    # Словарь с данными принято называть context
+    # Одна строка вместо тысячи слов на SQL:
+    # в переменную posts будет сохранена выборка из 10 объектов модели Post,
+    # отсортированных по полю pub_date по убыванию (от больших значений к меньшим)
+    posts = Post.objects.order_by('-pub_date')[:10]
+    # В словаре context отправляем информацию в шаблон
     context = {
-        'title': title,
-        'text': 'Главная страница',
+        'posts': posts,
     }
-    #return render(request, template, context)
-    return HttpResponse(template.render(context, request))
+    return render(request, 'posts/index.html', context)
+
+
+    #return HttpResponse(template.render(context, request))
 
 
 def groups_list(request):
-    template = loader.get_template('posts\\group_list.html')
-    title = 'Здесь будет информация о группах проекта Yatube'
-    # Словарь с данными принято называть context
+    posts = Post.objects.all()
+    # В словаре context отправляем информацию в шаблон
     context = {
-        'title': title,
-        'text': 'Страница групп',
+        'posts': posts,
     }
-    # return render(request, template, context)
-    return HttpResponse(template.render(context, request))
+    return render(request, 'posts/group_list.html', context)
 
 
 # В урл мы ждем парметр, и нужно его прередать в функцию для использования
